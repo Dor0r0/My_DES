@@ -1,5 +1,5 @@
 from key_generator import round_keys,permute,hex_to_bin64
-from pbox import *
+from pbox import IP,FP
 
 
 

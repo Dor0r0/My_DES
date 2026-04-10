@@ -1,6 +1,3 @@
-#sbox
-
-
 S_BOXES = [
     # S1
     [
