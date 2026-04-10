@@ -3,8 +3,8 @@ from pbox import *
 
 
 
-block_hex = input().strip()
-block_64 = hex_to_bin64(block_hex)
-ip_block = permute(block_64, IP)
+pt_hex = input().strip()
+pt_64 = hex_to_bin64(pt_hex)
+ip_block = permute(pt_64, IP)
 
 print(ip_block)
