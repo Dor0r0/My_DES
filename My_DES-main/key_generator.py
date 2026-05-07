@@ -18,11 +18,16 @@ PC2 = [
     34, 53, 46, 42, 50, 36, 29, 32
 ]
 
+
+
+
 SHIFTS = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
+
+# ... (상단 PC1, PC2, SHIFTS 동일)
 
 def hex_to_bin64(hex_str):
     hex_str = hex_str.removeprefix("0x").removeprefix("0X")
-    return format(int(hex_str, 16), '064b')
+    return format(int(hex_str, 16), '064b').zfill(64) # 0 패딩 추가
 
 def permute(bitstr, table):
     return ''.join(bitstr[i - 1] for i in table)
@@ -31,29 +36,17 @@ def left_rotate(bits, n):
     return bits[n:] + bits[:n]
 
 def generate_round_keys(key64):
-    round_keys = []
-
+    keys = []
     key56 = permute(key64, PC1)
-
     c = key56[:28]
     d = key56[28:]
-
     for s in SHIFTS:
         c = left_rotate(c, s)
         d = left_rotate(d, s)
-        cd = c + d
-        rk = permute(cd, PC2)
-        round_keys.append(rk)
+        keys.append(permute(c + d, PC2))
+    return keys
 
-    return round_keys
-
-key_hex = input().strip()
-key64 = hex_to_bin64(key_hex)
-
-print("key64 =", key64)
-print("len =", len(key64))
-
-round_keys = generate_round_keys(key64)
-
-for i, rk in enumerate(round_keys, 1):
-    print(f"K{i:2d} = {rk}")
+# 다른 파일에서 이 변수를 사용할 수 있도록 미리 정의
+# 실제 사용 시에는 이 파일이 임포트되면서 아래 코드가 실행됩니다.
+key_hex = input("Enter 64-bit Key (hex): ").strip()
+round_keys = generate_round_keys(hex_to_bin64(key_hex))
