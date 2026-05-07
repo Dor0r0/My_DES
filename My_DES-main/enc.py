@@ -26,7 +26,6 @@ def des_function(r, k):
     for idx, chunk in enumerate(chunks):
         row = int(chunk[0] + chunk[5], 2)
         col = int(chunk[1:5], 2)
-        # i.index(i) 대신 enumerate의 idx를 사용해야 각기 다른 S-Box를 참조함
         val = S_BOXES[idx][row][col]
         my_r += format(val, "04b")
         
@@ -44,7 +43,6 @@ def round_function(i, k):
 def round_function_last(i, k):
     left = i[:32]
     right = i[32:]
-    # 마지막 라운드는 좌우를 바꾸지 않음 (교과서적 구현 혹은 복호화 직전 처리)
     new_left = bit_xor(left, des_function(right, k))
     new_right = right
     return new_left + new_right
@@ -59,7 +57,7 @@ if __name__ == "__main__":
     for i in range(15):
         current_block = round_function(current_block, round_keys[i])
     
-    # 16라운드
+    # 막라
     final_round_block = round_function_last(current_block, round_keys[15])
     ciphertext = permute(final_round_block, FP)
 
